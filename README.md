@@ -1,80 +1,103 @@
 # QR Lite
 
-给设计、运营和市场同事用的本地二维码替换工具。  
-Created by @husky
+本地二维码替换工具，适合设计、运营、市场这类需要快速改图但不想进复杂设计软件的场景。
 
-上传原图后，软件可以自动识别原二维码并替换；如果原图里没有二维码、只有空框或占位框，也可以直接手动画框放一个新的二维码。
+QR Lite can replace an existing QR code automatically, or add a new one manually when the source image only has an empty placeholder box.
 
-## 现在这版包含什么
+## What It Does
 
-- 自动替换模式：适合原图里本来就有二维码的图片
-- 手动添加模式：适合原图里没有二维码、只有空框/白框/占位框的图片
-- 右侧蓝框拖拽微调：支持移动、缩放，并联动重新生成
-- 上传二维码图片裁切：可以先把二维码下面的说明文字裁掉
-- 直接输入内容生成二维码：不上传二维码图片也能用
-- 保留原图输出信息：尽量保留 ICC Profile / DPI / EXIF
-- `CMYK JPEG` 原图支持：替换 `RGB` 二维码后，输出仍可保持 `CMYK JPEG`
-- 大图性能优化：4K 级原图的处理等待时间明显下降
-- 启动和关闭优化：修复了关闭时报 `Tcl_AsyncDelete` 的问题
+- 自动识别原图中的二维码并替换
+- 原图没有二维码时，支持手动画框添加
+- 支持拖拽蓝框微调位置和大小
+- 支持上传二维码图片，或直接输入内容生成二维码
+- 支持先裁掉二维码图片下方说明文字
+- 尽量保留原图的 ICC Profile / DPI / EXIF
+- `CMYK JPEG` 原图替换 `RGB` 二维码后，输出仍可保持 `CMYK JPEG`
+- 对大图做了性能优化，低配笔记本上的等待时间更短
 
-## 本地运行
+## Typical Use Cases
+
+- 海报、易拉宝、宣传图里的二维码换新
+- 设计稿里只有空框，需要后补二维码
+- 市场物料批量改二维码，但又不想每张图重新排版
+- 需要尽量保留原图色彩信息的印刷类 JPEG 文件
+
+## Two Modes
+
+### 1. Auto Replace
+
+适合原图里本来就有二维码的情况。  
+软件会先自动识别二维码位置，再替换成新的二维码。
+
+### 2. Manual Placement
+
+适合原图里没有二维码、只有空框 / 白框 / 占位框的情况。  
+你只需要在右侧预览图上把蓝框拖到目标位置，然后开始生成。
+
+## Key Features
+
+### Direct, Foolproof UI
+
+界面文案已经按“下一步该做什么”重写，不走抽象产品话术，尽量降低误操作。
+
+### CMYK-Safe Output
+
+当原图是 `CMYK JPEG` 且输出格式保持 `JPEG` 时，程序会走专门的 `CMYK` 处理路径，尽量避免整张图来回转色。
+
+### Performance Optimized
+
+针对大图场景做过专项优化：
+
+- 自动识别先在缩小图上做，再回推原尺寸坐标
+- 透视贴图只处理二维码附近局部区域，不再每次对整张图做大范围混合
+- 启动时延后加载重模块，减少打开软件时的卡顿感
+
+## Quick Start
+
+### Requirements
+
+- Python 3.11
+- Windows recommended
+
+### Run From Source
 
 ```powershell
-cd C:\Users\yanxiang2\Desktop\QR_lite
+git clone https://github.com/carsonte/QR-Lite.git
+cd QR-Lite
 python -m pip install -r requirements.txt
 python launcher.py
 ```
 
-如果这台电脑里 `python` 命令不可用，就改成：
+如果本机没有 `python` 命令，可以改用：
 
 ```powershell
 py -m pip install -r requirements.txt
 py launcher.py
 ```
 
-启动后会先出现一个启动窗口，然后自动打开浏览器。  
-如果浏览器没有自动打开，就手动访问终端里显示的本地地址，通常是：
+启动后会先显示启动窗口，然后自动打开浏览器。  
+如果浏览器没有自动打开，可以手动访问终端输出的本地地址，通常是：
 
 ```text
 http://127.0.0.1:7860
 ```
 
-## 页面使用
+## How To Use
 
-1. 先选模式
-`图里有原二维码，帮我自动替换`
-`图里没有原二维码，我手动放一个`
+1. 先判断原图里有没有原二维码
+2. 选择 `自动替换` 或 `手动放一个`
+3. 上传原图
+4. 上传新二维码图片，或者直接输入二维码内容
+5. 手动模式下，先把右侧蓝框拖到目标位置
+6. 点击开始处理
+7. 不满意就继续微调，再重新生成
+8. 下载结果
 
-2. 上传原图
+## Packaging
 
-3. 上传新二维码图片，或者直接输入二维码内容
-
-4. 手动模式下，先把右边蓝框拖到要放二维码的位置
-
-5. 点开始处理
-自动模式：`开始自动替换`
-手动模式：`开始手动添加`
-
-6. 看右边结果，不满意就继续拖蓝框或改参数再生成
-
-7. 下载结果
-
-## 输出和色彩说明
-
-- 原图是 `RGB` 时，输出按当前选择的格式保存
-- 原图是 `CMYK JPEG`，并且输出格式是 `SAME/JPEG` 时：
-  - 新二维码就算是 `RGB` 图片，最终输出也会保持 `CMYK JPEG`
-  - 软件会尽量沿用原图的 ICC Profile
-- 如果你把输出格式改成 `PNG`，那就不保证还是 `CMYK`
-
-## 正式打包
-
-当前仓库只保留一个正式版打包方案：`onedir`
-
-执行：
+仓库当前只保留一个正式打包方案：`onedir`
 
 ```powershell
-cd C:\Users\yanxiang2\Desktop\QR_lite
 .\build_exe.ps1
 ```
 
@@ -84,46 +107,43 @@ cd C:\Users\yanxiang2\Desktop\QR_lite
 dist\QRLite\QRLite.exe
 ```
 
-## 打包版特点
+注意：
 
-- 只保留 `QRLite` 正式版，不再保留旧的多套打包变体
-- 启动器会先显示启动窗口，再自动打开浏览器
-- 空闲一段时间后，打包版会自动退出后台服务
-- 打包后会自动清理一批没用的 OpenCV / reload / websocket 文件，减小体积
+- 这是目录版，不是单文件版
+- 分发给同事时，要发整个 `dist/QRLite` 文件夹
+- 更推荐把整个目录打成 zip 再发
 
-## GitHub 仓库建议
+## Repository Layout
 
-建议提交到 GitHub 的内容：
+```text
+app.py                 FastAPI server
+launcher.py            Windows launcher window
+qr_replace.py          QR detection and replacement core
+web/                   Frontend page
+branding/              Branding assets
+build_exe.ps1          Packaging script
+QRLite.spec            PyInstaller spec
+```
 
-- `app.py`
-- `launcher.py`
-- `qr_replace.py`
-- `web/`
-- `branding/`
-- `build_brand_assets.py`
-- `build_exe.ps1`
-- `QRLite.spec`
-- `requirements.txt`
-- `README.md`
-- `.gitignore`
-- `.gitattributes`
+## GitHub Notes
 
-建议不要提交到 GitHub 的内容：
+- `dist/`、`build/`、`tmp_test/`、`output/` 这些构建和测试产物不会提交到仓库
+- 正式包更适合放在 GitHub Releases，而不是直接提交进仓库历史
+- 当前仓库优先保证稳定性、兼容性和可维护性，其次才是继续压缩体积
 
-- `dist/`
-- `build/`
-- `output/`
-- `tmp_test/`
-- `__pycache__/`
-- `.gradio/`
+## Current Status
 
-这些已经写进 `.gitignore` 了，所以直接 `git add .` 也不会把它们带上去。
+当前版本已经包含这些修复和优化：
 
-如果你要在 GitHub 发正式包，建议把 `dist/QRLite` 放到 GitHub Releases，不要直接提交进仓库历史。
+- 手动添加二维码模式
+- 模式切换状态修复
+- 启动卡住问题修复
+- 关闭时报 `Tcl_AsyncDelete` 修复
+- 大图性能优化
+- `CMYK + RGB 二维码` 保色处理
+- 打包体积与依赖清理优化
 
-## 说明
+## License
 
-- 这是本地网页应用，不上传云端
-- 双击 `QRLite.exe` 后，会在本机启动一个本地服务，再自动打开浏览器
-- 因为包含 Python、OpenCV、NumPy 和图像依赖，体积不会特别小
-- 当前版本优先保证稳定性、兼容性和处理效果，其次再继续压体积
+暂未添加开源许可证。  
+如果你准备对外公开分发，建议后续补一个明确的 `LICENSE` 文件。
