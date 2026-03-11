@@ -1,0 +1,1987 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Lite</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <style>
+    :root {
+      --primary: #1677ff;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2329;
+      --muted: #6b778d;
+      --border: #d9e1f2;
+      --success-bg: #f6ffed;
+      --success-border: #b7eb8f;
+      --error-bg: #fff2f0;
+      --error-border: #ffccc7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(22,119,255,.09), transparent 36%),
+        radial-gradient(circle at 84% 12%, rgba(82,196,26,.08), transparent 32%),
+        var(--bg);
+    }
+    .wrap { max-width: 1320px; margin: 22px auto; padding: 0 14px 24px; }
+    .hero {
+      border: 1px solid #d9e8ff;
+      background: linear-gradient(135deg, #fff, #eef5ff);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 10px 28px rgba(22,119,255,.08);
+      margin-bottom: 14px;
+    }
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: block;
+      box-shadow: 0 10px 24px rgba(22,119,255,.18);
+      flex: 0 0 auto;
+    }
+    .author-badge {
+      border: 1px solid #cfe1ff;
+      background: rgba(255,255,255,.85);
+      color: #31507f;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .hero h1 { margin: 0 0 6px; color: #174ea6; font-size: 24px; }
+    .hero p { margin: 0; color: #4f6387; }
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #cfe1ff;
+      background: rgba(255,255,255,.88);
+      color: #2b538e;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(380px, 0.95fr) minmax(520px, 1.35fr);
+      gap: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid #e4ebfb;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+    .card-hd {
+      padding: 14px 16px;
+      border-bottom: 1px solid #edf2fb;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .card-desc {
+      color: #7083a8;
+      font-size: 12px;
+      font-weight: 400;
+    }
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #eef6ff;
+      color: #174ea6;
+      border: 1px solid #cfe1ff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .card-bd { padding: 14px 16px 16px; }
+    .section-block {
+      border: 1px solid #e8eefb;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fff, #fbfdff);
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .section-block:last-child {
+      margin-bottom: 0;
+    }
+    .section-head {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .section-kicker {
+      color: #1677ff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .section-title {
+      margin: 0;
+      color: #1f3560;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+    .section-desc {
+      margin: 0;
+      color: #7083a8;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .field { margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    .label {
+      display: block;
+      font-size: 13px;
+      color: #384a6b;
+      margin-bottom: 6px;
+    }
+    input[type="file"], textarea, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 10px;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    textarea { resize: vertical; min-height: 78px; }
+    input[type="file"]:focus, textarea:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22,119,255,.15);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: end;
+    }
+    .chk {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding-top: 22px;
+      color: #2f4266;
+      font-size: 14px;
+    }
+    .range-wrap { margin-bottom: 10px; }
+    .range-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #455a80;
+    }
+    input[type="range"] { width: 100%; }
+    details {
+      border: 1px dashed #d6e0f5;
+      border-radius: 10px;
+      padding: 6px 10px 2px;
+      margin-bottom: 12px;
+      background: #fbfcff;
+    }
+    summary {
+      cursor: pointer;
+      color: #274b87;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .controls-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .helper-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #dde8fb;
+      background: #f8fbff;
+      color: #53709d;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      padding: 11px 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(22,119,255,.25);
+    }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .btn.secondary {
+      background: #fff;
+      color: #2f4266;
+      border: 1px solid #cdd8ee;
+      box-shadow: none;
+    }
+    .muted { color: var(--muted); font-size: 12px; margin-left: 0; }
+    .action-note {
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid #e0e8f7;
+      background: #f8fbff;
+      color: #62789d;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      color: #445a81;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+    .toolbar-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .status-pill {
+      border: 1px solid #91caff;
+      background: #e6f4ff;
+      color: #0958d9;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      display: none;
+    }
+    .preview-panel {
+      padding: 12px;
+      border: 1px solid #e7eefb;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff, #fbfdff);
+    }
+    .preview-caption {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #e0e8f7;
+      background: #f8fbff;
+      color: #62789d;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .preview-box {
+      height: 72vh;
+      min-height: 520px;
+      border: 1px dashed #cfd9ef;
+      border-radius: 10px;
+      background: #fbfcff;
+      overflow: auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 10px;
+    }
+    .stage {
+      position: relative;
+      display: inline-block;
+      min-width: 100%;
+      min-height: 100%;
+    }
+    .preview {
+      display: none;
+      border-radius: 8px;
+      max-width: 100%;
+      height: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .preview.original {
+      max-width: none;
+      width: auto;
+    }
+    .placeholder {
+      color: #7c8cab;
+      display: inline-block;
+      margin-top: 16px;
+    }
+    .adjust-box {
+      position: absolute;
+      border: 2px solid #1677ff;
+      background: rgba(22,119,255,.06);
+      border-radius: 6px;
+      display: none;
+      cursor: move;
+      touch-action: none;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.8) inset;
+      overflow: visible;
+    }
+    .adjust-box::before {
+      content: attr(data-label);
+      position: absolute;
+      top: -22px;
+      left: 0;
+      font-size: 12px;
+      color: #174ea6;
+      background: rgba(255,255,255,.95);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #d4e2ff;
+    }
+    .resize-handle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      right: -7px;
+      bottom: -7px;
+      border-radius: 3px;
+      background: #1677ff;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px #1677ff;
+      cursor: nwse-resize;
+      z-index: 2;
+    }
+    .live-qr {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .live-qr img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      max-width: none;
+      max-height: none;
+      image-rendering: pixelated;
+      user-select: none;
+      pointer-events: none;
+    }
+    .crop-panel {
+      margin-top: 10px;
+    }
+    .crop-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .crop-preview-box {
+      height: 320px;
+      border: 1px dashed #cfd9ef;
+      border-radius: 10px;
+      background: #fbfcff;
+      overflow: auto;
+      padding: 10px;
+    }
+    .crop-stage {
+      position: relative;
+      display: inline-block;
+      min-width: 100%;
+      min-height: 100%;
+    }
+    .crop-preview {
+      display: none;
+      border-radius: 8px;
+      max-width: 100%;
+      height: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .crop-box {
+      position: absolute;
+      border: 2px solid #52c41a;
+      background: rgba(82,196,26,.08);
+      border-radius: 6px;
+      display: none;
+      cursor: move;
+      touch-action: none;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.8) inset;
+      overflow: visible;
+    }
+    .crop-box::before {
+      content: "二维码主体";
+      position: absolute;
+      top: -22px;
+      left: 0;
+      font-size: 12px;
+      color: #237804;
+      background: rgba(255,255,255,.95);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #d9f7be;
+    }
+    .crop-handle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      right: -7px;
+      bottom: -7px;
+      border-radius: 3px;
+      background: #52c41a;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px #52c41a;
+      cursor: nwse-resize;
+      z-index: 2;
+    }
+    .mode-grid {
+      display: grid;
+      gap: 10px;
+    }
+    .mode-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid #d6e3fb;
+      border-radius: 12px;
+      background: #fbfdff;
+      cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .mode-option input {
+      margin-top: 3px;
+      flex: 0 0 auto;
+    }
+    .mode-option.active {
+      border-color: #1677ff;
+      background: #eef6ff;
+      box-shadow: 0 0 0 3px rgba(22,119,255,.12);
+    }
+    .mode-copy {
+      display: block;
+    }
+    .mode-title {
+      display: block;
+      color: #173b7a;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .mode-desc {
+      display: block;
+      color: #5b6f92;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .mode-hint {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border: 1px dashed #b9d4ff;
+      border-radius: 10px;
+      background: #f7fbff;
+      color: #234b86;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .field-tip {
+      margin-top: 6px;
+      color: #7083a8;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .tip { color: #7083a8; font-size: 12px; margin-top: 8px; }
+    .msg {
+      margin-top: 12px;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      white-space: pre-line;
+    }
+    .msg.error { background: var(--error-bg); border-color: var(--error-border); color: #a8071a; }
+    .msg.success { background: var(--success-bg); border-color: var(--success-border); color: #135200; }
+    .download { margin-top: 10px; display: inline-block; text-decoration: none; }
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr; }
+      .chk { padding-top: 0; min-height: auto; }
+      .preview-box { height: 60vh; min-height: 420px; }
+      .action-row { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-top">
+        <div class="hero-copy">
+          <div class="brand-mark">
+            <img class="brand-icon" src="/static/app-icon.png" alt="QR Lite icon" />
+            <div>
+              <h1>QR Lite 放二维码</h1>
+              <p>图里有原二维码就自动替换。图里没有原二维码、只有空框时，就手动放一个。</p>
+            </div>
+          </div>
+          <div class="hero-pills">
+            <span class="hero-pill">有原二维码 -> 自动替换</span>
+            <span class="hero-pill">只有空框/白框 -> 手动放一个</span>
+            <span class="hero-pill">右边蓝框放哪，结果就出现在哪</span>
+          </div>
+        </div>
+        <div class="author-badge">Created by @husky</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <div class="card-hd">
+          <div class="card-title-wrap">
+            <div>参数设置</div>
+            <div class="card-desc">按左边步骤做，右边实时看位置和结果。</div>
+          </div>
+          <div class="card-badge">左边设置</div>
+        </div>
+        <div class="card-bd">
+          <form id="form">
+            <div class="section-block">
+              <div class="section-head">
+                <span class="section-kicker">Step 1</span>
+                <h2 class="section-title">先选模式</h2>
+                <p class="section-desc">先判断图里原来有没有二维码。这个判断对不对，会直接影响后面怎么放二维码。</p>
+              </div>
+              <div class="mode-grid">
+                <label class="mode-option active" id="mode_auto_card">
+                  <input id="placement_mode_auto" type="radio" name="placement_mode" value="auto" checked />
+                  <span class="mode-copy">
+                    <span class="mode-title">图里有原二维码，帮我自动替换</span>
+                    <span class="mode-desc">适合海报、截图、设计稿成品图里本来就带二维码的情况。</span>
+                  </span>
+                </label>
+                <label class="mode-option" id="mode_manual_card">
+                  <input id="placement_mode_manual" type="radio" name="placement_mode" value="manual" />
+                  <span class="mode-copy">
+                    <span class="mode-title">图里没有原二维码，我手动放一个</span>
+                    <span class="mode-desc">适合只有空框、白框、占位框，需要你自己指定放置位置的情况。</span>
+                  </span>
+                </label>
+              </div>
+              <div id="mode_hint" class="mode-hint">先判断图片里有没有原二维码。有就点上面第一个，没有、只有空框/白框就点第二个。</div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-head">
+                <span class="section-kicker">Step 2</span>
+                <h2 class="section-title">上传原图和新二维码</h2>
+                <p class="section-desc">先传原图，再传你要放进去的新二维码。没有二维码图片时，也可以直接输入内容自动生成。</p>
+              </div>
+              <div class="controls-grid">
+                <div class="field">
+                  <label class="label">上传要处理的原图（JPG/PNG）</label>
+                  <input id="source_image" type="file" accept=".jpg,.jpeg,.png,image/*" required />
+                  <div class="field-tip">先传原图。手动模式下，右边蓝框就是放二维码的位置。</div>
+                </div>
+
+                <div class="field">
+                  <label class="label">上传你要放进去的新二维码图片（可选）</label>
+                  <input id="replacement_qr_image" type="file" accept=".jpg,.jpeg,.png,image/*" />
+                  <div class="field-tip">如果你已经有二维码图，直接传这里。没有图也可以在下一项直接输入内容。</div>
+                </div>
+
+                <details id="qr_crop_details">
+                  <summary>如果新二维码图片下面带字，就在这里把字裁掉</summary>
+                  <div class="crop-toolbar">
+                    <label class="chk" style="padding-top:0">
+                      <input id="enable_qr_crop" type="checkbox" />
+                      只框住二维码本体
+                    </label>
+                    <button class="btn secondary" id="reset_qr_crop_btn" type="button">二维码裁切重置</button>
+                  </div>
+                  <div class="crop-panel" id="qr_crop_panel">
+                    <div class="crop-preview-box">
+                      <div class="crop-stage">
+                        <span id="qr_crop_placeholder" class="placeholder">上传新二维码图片后，在这里把框收进二维码本体，别把下面的字带进去。</span>
+                        <img id="qr_crop_preview" class="crop-preview" alt="qr-crop-preview" />
+                        <div id="qr_crop_box" class="crop-box">
+                          <div id="qr_crop_handle" class="crop-handle"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tip">只框二维码本体。底部说明文字、外层留白、整张截图边缘都不要一起框进去。</div>
+                  </div>
+                </details>
+
+                <div class="field">
+                  <label class="label">没有二维码图片，就在这里输入二维码内容</label>
+                  <textarea id="replacement_qr_text" placeholder="例如链接、微信号、文本内容。填这里后会自动生成新二维码。"></textarea>
+                  <div class="field-tip">上传二维码图片和直接输内容，二选一就行。</div>
+                </div>
+              </div>
+              <div class="helper-box">
+                原图一定要先上传。新二维码图片如果下面带字，先在上面的绿色框里把字裁掉再提交，会更稳。
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-head">
+                <span class="section-kicker">Step 3</span>
+                <h2 class="section-title">设置输出和微调</h2>
+                <p class="section-desc">自动模式会先识别原二维码。手动模式会直接用右边蓝框的位置。下面这些参数随时可以再调整。</p>
+              </div>
+              <div class="row">
+                <label class="chk" id="replace_all_wrap">
+                  <input id="replace_all" type="checkbox" />
+                  替换全部识别到的二维码
+                </label>
+                <div class="field" style="margin-bottom:0">
+                  <label class="label">输出格式</label>
+                  <select id="output_format">
+                    <option value="SAME">SAME（跟原图一致）</option>
+                    <option value="PNG">PNG</option>
+                    <option value="JPEG">JPEG</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="range-wrap">
+                <div class="range-top"><span>边缘融合强度</span><span id="feather_ratio_v">0.012</span></div>
+                <input id="feather_ratio" type="range" min="0.001" max="0.04" step="0.001" value="0.012" />
+              </div>
+
+              <div class="range-wrap">
+                <div class="range-top"><span>二维码留白（%）</span><span id="quiet_zone_percent_v">2.5</span></div>
+                <input id="quiet_zone_percent" type="range" min="0" max="8" step="0.1" value="2.5" />
+              </div>
+
+              <details>
+                <summary>高级微调（也可以直接拖右边蓝框）</summary>
+                <div class="range-wrap">
+                  <div class="range-top"><span>水平移动（px）</span><span id="offset_x_px_v">0</span></div>
+                  <input id="offset_x_px" type="range" min="-500" max="500" step="1" value="0" />
+                </div>
+                <div class="range-wrap">
+                  <div class="range-top"><span>垂直移动（px）</span><span id="offset_y_px_v">0</span></div>
+                  <input id="offset_y_px" type="range" min="-500" max="500" step="1" value="0" />
+                </div>
+                <div class="range-wrap">
+                  <div class="range-top"><span>尺寸缩放（%）</span><span id="scale_percent_v">100</span></div>
+                  <input id="scale_percent" type="range" min="40" max="220" step="1" value="100" />
+                </div>
+                <div class="range-wrap">
+                  <div class="range-top"><span>旋转角度（°）</span><span id="rotation_deg_v">0</span></div>
+                  <input id="rotation_deg" type="range" min="-30" max="30" step="0.5" value="0" />
+                </div>
+              </details>
+
+              <div class="helper-box">
+                留白通常 `1.5% - 3%` 比较稳。自动模式找不到二维码时，直接切到“手动放一个”，不要反复重试自动模式。
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-head">
+                <span class="section-kicker">Step 4</span>
+                <h2 class="section-title">执行并检查结果</h2>
+                <p class="section-desc">提交后先看右边预览。不满意就继续拖蓝框或改参数，再重新生成一次。</p>
+              </div>
+              <div class="actions">
+                <div class="action-row">
+                  <button class="btn" id="submit_btn" type="submit">开始自动替换</button>
+                  <button class="btn secondary" id="reset_position_btn" type="button">重置微调</button>
+                  <button class="btn secondary" id="close_app_btn" type="button">做完了，关闭软件</button>
+                </div>
+                <div class="action-note">
+                  <span class="muted" id="action_tip">自动模式会先找原二维码。手动模式要先把右边蓝框放到位。</span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-hd">
+          <div class="card-title-wrap">
+            <div>结果预览</div>
+            <div class="card-desc">右边先确认位置，再决定要不要继续拖蓝框微调。</div>
+          </div>
+          <div class="card-badge">右边确认</div>
+        </div>
+        <div class="card-bd">
+          <div class="preview-panel">
+            <div class="toolbar">
+              <div class="toolbar-right">
+                <label><input id="original_size" type="checkbox" /> 1:1 原尺寸查看</label>
+                <span id="preview_hint_text">自动模式识别成功后，可拖蓝框微调位置和大小。</span>
+              </div>
+              <div id="sync_status" class="status-pill">后台同步中...</div>
+            </div>
+
+            <div class="preview-box" id="preview_box">
+              <div class="stage" id="stage">
+                <span id="placeholder" class="placeholder">先上传原图。手动模式下，右边蓝框放哪，二维码最后就出现在哪。</span>
+                <img id="preview" class="preview" alt="preview" />
+                <div id="adjust_box" class="adjust-box" data-label="拖拽移动">
+                  <div id="live_qr" class="live-qr"><img id="live_qr_img" alt="qr-live" /></div>
+                  <div id="resize_handle" class="resize-handle"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-caption" id="preview_bottom_tip">自动模式下，只有“替换单个二维码”才会显示蓝框。手动模式下，请先把蓝框拖到要放二维码的位置。</div>
+          </div>
+          <div id="msg"></div>
+          <a id="download" class="download btn" style="display:none" target="_blank">下载结果</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const sliderIds = [
+      "feather_ratio",
+      "quiet_zone_percent",
+      "offset_x_px",
+      "offset_y_px",
+      "scale_percent",
+      "rotation_deg"
+    ];
+    const DEFAULTS = {
+      offset_x_px: 0,
+      offset_y_px: 0,
+      scale_percent: 100,
+      rotation_deg: 0
+    };
+    const PLACEMENT_MODES = {
+      AUTO: "auto",
+      MANUAL: "manual"
+    };
+
+    const form = document.getElementById("form");
+    const submitBtn = document.getElementById("submit_btn");
+    const resetPositionBtn = document.getElementById("reset_position_btn");
+    const closeAppBtn = document.getElementById("close_app_btn");
+    const resetQrCropBtn = document.getElementById("reset_qr_crop_btn");
+    const enableQrCrop = document.getElementById("enable_qr_crop");
+    const placementModeAuto = document.getElementById("placement_mode_auto");
+    const placementModeManual = document.getElementById("placement_mode_manual");
+    const modeAutoCard = document.getElementById("mode_auto_card");
+    const modeManualCard = document.getElementById("mode_manual_card");
+    const modeHint = document.getElementById("mode_hint");
+    const replaceAll = document.getElementById("replace_all");
+    const replaceAllWrap = document.getElementById("replace_all_wrap");
+    const actionTip = document.getElementById("action_tip");
+    const previewHintText = document.getElementById("preview_hint_text");
+    const previewBottomTip = document.getElementById("preview_bottom_tip");
+    const msg = document.getElementById("msg");
+    const preview = document.getElementById("preview");
+    const placeholder = document.getElementById("placeholder");
+    const download = document.getElementById("download");
+    const originalSize = document.getElementById("original_size");
+    const adjustBox = document.getElementById("adjust_box");
+    const resizeHandle = document.getElementById("resize_handle");
+    const syncStatus = document.getElementById("sync_status");
+    const liveQr = document.getElementById("live_qr");
+    const liveQrImg = document.getElementById("live_qr_img");
+    const qrCropPreview = document.getElementById("qr_crop_preview");
+    const qrCropPlaceholder = document.getElementById("qr_crop_placeholder");
+    const qrCropBox = document.getElementById("qr_crop_box");
+    const qrCropHandle = document.getElementById("qr_crop_handle");
+
+    const sourceInput = document.getElementById("source_image");
+    const qrInput = document.getElementById("replacement_qr_image");
+    const qrTextInput = document.getElementById("replacement_qr_text");
+
+    let isSyncing = false;
+    let pendingRun = false;
+    let syncTimer = null;
+    let currentResult = null;
+    let currentBox = null;
+    let manualTargetBox = null;
+    let manualTargetDirty = false;
+    let dragState = null;
+    let resizeState = null;
+    let qrCropDragState = null;
+    let qrCropResizeState = null;
+    let sessionId = "";
+    let sourceObjectUrl = "";
+    let qrObjectUrl = "";
+    let qrServerUrl = "";
+    let activeRequestId = 0;
+    let qrSourceKind = "";
+    let reportedQrBox = null;
+    let qrCropState = null;
+    let qrCropDirty = false;
+    let liveOverlayActive = false;
+    let heartbeatTimer = null;
+    let shuttingDown = false;
+    const clientId = (window.crypto && window.crypto.randomUUID)
+      ? window.crypto.randomUUID()
+      : ("qr-lite-" + Date.now() + "-" + Math.random().toString(16).slice(2));
+
+    function clamp(v, min, max) {
+      return Math.min(max, Math.max(min, v));
+    }
+
+    function getPlacementMode() {
+      return placementModeManual.checked ? PLACEMENT_MODES.MANUAL : PLACEMENT_MODES.AUTO;
+    }
+
+    function isManualMode() {
+      return getPlacementMode() === PLACEMENT_MODES.MANUAL;
+    }
+
+    function getCurrentResultPlacementMode() {
+      if (!currentResult || !currentResult.report) {
+        return "";
+      }
+      return String(currentResult.report.placement_mode || "");
+    }
+
+    function hasCurrentModeResult() {
+      return Boolean(currentResult && getCurrentResultPlacementMode() === getPlacementMode());
+    }
+
+    function isManualSetupMode() {
+      return isManualMode() && !hasCurrentModeResult();
+    }
+
+    function getIdleSubmitText() {
+      return isManualMode() ? "开始手动添加" : "开始自动替换";
+    }
+
+    function getResetButtonText() {
+      return isManualSetupMode() ? "框选错了，重新放框" : "重置微调";
+    }
+
+    function getAdjustBoxLabel() {
+      if (isManualSetupMode()) {
+        return "把框拖到要放二维码的位置";
+      }
+      if (isManualMode()) {
+        return "拖蓝框微调位置";
+      }
+      return "拖拽移动";
+    }
+
+    function setSyncStatus(visible) {
+      syncStatus.style.display = visible ? "inline-block" : "none";
+    }
+
+    function showMessage(text, type) {
+      msg.className = "msg " + type;
+      msg.textContent = text;
+    }
+
+    function clearMessage() {
+      msg.className = "";
+      msg.textContent = "";
+    }
+
+    function setSliderValue(id, value) {
+      const input = document.getElementById(id);
+      const out = document.getElementById(id + "_v");
+      input.value = String(value);
+      out.textContent = String(value);
+    }
+
+    function getSliderNumber(id) {
+      return Number(document.getElementById(id).value);
+    }
+
+    function revokeUrl(url) {
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function cacheBustedUrl(url) {
+      if (!url) {
+        return "";
+      }
+      return url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+    }
+
+    function setPreviewImage(url) {
+      if (url) {
+        preview.src = url;
+        preview.style.display = "block";
+        placeholder.style.display = "none";
+      } else {
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+        placeholder.style.display = "inline-block";
+      }
+    }
+
+    function showSourcePreview() {
+      if (sourceObjectUrl) {
+        setPreviewImage(sourceObjectUrl);
+        return;
+      }
+      if (currentResult && currentResult.source_url) {
+        setPreviewImage(cacheBustedUrl(currentResult.source_url));
+        return;
+      }
+      setPreviewImage("");
+    }
+
+    function showResultPreview(data) {
+      const result = data || currentResult;
+      if (result && result.preview_url) {
+        setPreviewImage(cacheBustedUrl(result.preview_url));
+        return;
+      }
+      showSourcePreview();
+    }
+
+    function updateModeCards() {
+      modeAutoCard.classList.toggle("active", placementModeAuto.checked);
+      modeManualCard.classList.toggle("active", placementModeManual.checked);
+    }
+
+    function getPlacementImageSize() {
+      const iw = Number((currentResult && currentResult.report && currentResult.report.image_width) || preview.naturalWidth || 0);
+      const ih = Number((currentResult && currentResult.report && currentResult.report.image_height) || preview.naturalHeight || 0);
+      return { iw, ih };
+    }
+
+    function createDefaultManualTargetBox() {
+      const { iw, ih } = getPlacementImageSize();
+      if (!iw || !ih) {
+        return null;
+      }
+      const minSide = Math.min(iw, ih);
+      const side = Math.min(minSide, Math.max(36, Math.round(minSide * 0.28)));
+      return {
+        x: Math.round((iw - side) / 2),
+        y: Math.round((ih - side) / 2),
+        w: side,
+        h: side
+      };
+    }
+
+    function sanitizeManualTargetBox(box) {
+      if (!box) {
+        return null;
+      }
+      const { iw, ih } = getPlacementImageSize();
+      if (!iw || !ih) {
+        return null;
+      }
+      const x = clamp(Math.round(box.x), 0, Math.max(0, iw - 1));
+      const y = clamp(Math.round(box.y), 0, Math.max(0, ih - 1));
+      const maxW = Math.max(1, iw - x);
+      const maxH = Math.max(1, ih - y);
+      const minSize = Math.max(1, Math.min(24, maxW, maxH));
+      const w = clamp(Math.round(box.w), minSize, maxW);
+      const h = clamp(Math.round(box.h), minSize, maxH);
+      return { x, y, w, h };
+    }
+
+    function ensureManualTargetBox(forceReset) {
+      if (!isManualMode()) {
+        return manualTargetBox;
+      }
+      if (forceReset || !manualTargetBox) {
+        manualTargetBox = sanitizeManualTargetBox(createDefaultManualTargetBox());
+      }
+      return manualTargetBox;
+    }
+
+    function setLiveOverlayActive(active) {
+      const box = getActivePlacementBox();
+      const replaceAllActive = Boolean(
+        hasCurrentModeResult()
+        && currentResult
+        && currentResult.report
+        && currentResult.report.replace_all
+      );
+      liveOverlayActive = Boolean(active && box && !replaceAllActive);
+      liveQr.style.display = liveOverlayActive ? "flex" : "none";
+      renderLiveQr();
+    }
+
+    function beginInteractivePreview() {
+      const box = getActivePlacementBox();
+      if (!box || !preview.getAttribute("src")) {
+        return;
+      }
+      showSourcePreview();
+      setLiveOverlayActive(true);
+    }
+
+    async function pingHeartbeat(active, useBeacon) {
+      const payload = new URLSearchParams();
+      payload.set("client_id", clientId);
+      payload.set("active", active ? "true" : "false");
+
+      if (useBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon("/api/heartbeat", payload);
+        return;
+      }
+
+      try {
+        await fetch("/api/heartbeat", {
+          method: "POST",
+          body: payload,
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          keepalive: true
+        });
+      } catch (_) {
+      }
+    }
+
+    function startHeartbeat() {
+      stopHeartbeat();
+      pingHeartbeat(true, false);
+      heartbeatTimer = window.setInterval(() => {
+        pingHeartbeat(true, false);
+      }, 15000);
+    }
+
+    function stopHeartbeat() {
+      if (heartbeatTimer) {
+        window.clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
+      }
+    }
+
+    async function shutdownApp() {
+      if (shuttingDown) {
+        return;
+      }
+      shuttingDown = true;
+      closeAppBtn.disabled = true;
+      stopHeartbeat();
+      await pingHeartbeat(false, false);
+
+      try {
+        await fetch("/api/shutdown", { method: "POST", keepalive: true });
+        showMessage("应用正在关闭。页面失去连接后直接关闭这个窗口即可。", "success");
+      } catch (_) {
+        showMessage("已发送关闭指令。页面失去连接后直接关闭这个窗口即可。", "success");
+      }
+    }
+
+    function hasUploadedQrSource() {
+      return Boolean(qrInput.files[0] || qrObjectUrl || qrServerUrl || qrSourceKind === "uploaded");
+    }
+
+    function parseBox(box) {
+      if (!Array.isArray(box) || box.length !== 4) {
+        return null;
+      }
+      return {
+        x: Number(box[0]),
+        y: Number(box[1]),
+        w: Number(box[2]),
+        h: Number(box[3])
+      };
+    }
+
+    function buildLocalSourcePreview() {
+      const file = sourceInput.files[0];
+      revokeUrl(sourceObjectUrl);
+      sourceObjectUrl = file ? URL.createObjectURL(file) : "";
+      setPreviewImage(sourceObjectUrl);
+    }
+
+    function createDefaultQrCropBox() {
+      const iw = qrCropPreview.naturalWidth || 0;
+      const ih = qrCropPreview.naturalHeight || 0;
+      if (!iw || !ih) {
+        return null;
+      }
+      const side = Math.round(Math.min(iw, ih) * 0.9);
+      const x = Math.round((iw - side) / 2);
+      const y = Math.min(Math.round(ih * 0.05), Math.max(0, ih - side));
+      return { x, y, w: side, h: side };
+    }
+
+    function sanitizeQrCropBox(box) {
+      if (!box) {
+        return null;
+      }
+      const iw = qrCropPreview.naturalWidth || liveQrImg.naturalWidth || 0;
+      const ih = qrCropPreview.naturalHeight || liveQrImg.naturalHeight || 0;
+      if (!iw || !ih) {
+        return null;
+      }
+
+      const x = clamp(Math.round(box.x), 0, Math.max(0, iw - 1));
+      const y = clamp(Math.round(box.y), 0, Math.max(0, ih - 1));
+      const maxW = Math.max(1, iw - x);
+      const maxH = Math.max(1, ih - y);
+      const w = clamp(Math.round(box.w), 1, maxW);
+      const h = clamp(Math.round(box.h), 1, maxH);
+      return { x, y, w, h };
+    }
+
+    function ensureQrCropBox(forceReset) {
+      if (!hasUploadedQrSource()) {
+        qrCropState = null;
+        return null;
+      }
+      if (forceReset || !qrCropState) {
+        qrCropState = sanitizeQrCropBox(reportedQrBox || createDefaultQrCropBox());
+      }
+      return qrCropState;
+    }
+
+    function setQrImageSource(url) {
+      if (url) {
+        liveQrImg.src = url;
+        qrCropPreview.src = url;
+        qrCropPreview.style.display = "block";
+        qrCropPlaceholder.style.display = "none";
+      } else {
+        liveQrImg.removeAttribute("src");
+        qrCropPreview.removeAttribute("src");
+        qrCropPreview.style.display = "none";
+        qrCropPlaceholder.style.display = "inline-block";
+      }
+      updateQrCropVisibility();
+      renderLiveQr();
+    }
+
+    function buildLocalQrPreview() {
+      const file = qrInput.files[0];
+      revokeUrl(qrObjectUrl);
+      qrObjectUrl = file ? URL.createObjectURL(file) : "";
+      qrServerUrl = "";
+      qrSourceKind = file ? "uploaded" : "";
+      reportedQrBox = null;
+      qrCropState = null;
+      qrCropDirty = false;
+      setQrImageSource(qrObjectUrl);
+    }
+
+    function invalidateSession() {
+      sessionId = "";
+      currentResult = null;
+      currentBox = null;
+      download.style.display = "none";
+      download.removeAttribute("href");
+      adjustBox.style.display = "none";
+      setLiveOverlayActive(false);
+      setSyncStatus(false);
+    }
+
+    function quadToBBox(quad) {
+      if (!quad || quad.length !== 4) {
+        return null;
+      }
+      const xs = quad.map((p) => Number(p[0]));
+      const ys = quad.map((p) => Number(p[1]));
+      const x = Math.min(...xs);
+      const y = Math.min(...ys);
+      const w = Math.max(...xs) - x;
+      const h = Math.max(...ys) - y;
+      return { x, y, w, h };
+    }
+
+    function getScale() {
+      const { iw, ih } = getPlacementImageSize();
+      const dw = preview.clientWidth || 1;
+      const dh = preview.clientHeight || 1;
+      return { sx: dw / Math.max(1, iw || 1), sy: dh / Math.max(1, ih || 1) };
+    }
+
+    function getQrCropScale() {
+      const iw = qrCropPreview.naturalWidth || 1;
+      const ih = qrCropPreview.naturalHeight || 1;
+      const dw = qrCropPreview.clientWidth || 1;
+      const dh = qrCropPreview.clientHeight || 1;
+      return { sx: dw / iw, sy: dh / ih };
+    }
+
+    function getActivePlacementBox() {
+      if (isManualMode()) {
+        if (hasCurrentModeResult() && currentBox) {
+          return currentBox;
+        }
+        return ensureManualTargetBox(false);
+      }
+      if (hasCurrentModeResult() && currentBox) {
+        return currentBox;
+      }
+      return null;
+    }
+
+    function getActiveQrRenderBox() {
+      if (enableQrCrop.checked && hasUploadedQrSource()) {
+        return sanitizeQrCropBox(qrCropState);
+      }
+      return sanitizeQrCropBox(reportedQrBox);
+    }
+
+    function renderLiveQr() {
+      if (!liveOverlayActive || !liveQrImg.getAttribute("src")) {
+        liveQr.style.display = "none";
+        return;
+      }
+      liveQr.style.display = "flex";
+
+      const box = getActiveQrRenderBox();
+      if (!box || !liveQr.clientWidth || !liveQr.clientHeight || !liveQrImg.naturalWidth || !liveQrImg.naturalHeight) {
+        liveQrImg.style.width = "100%";
+        liveQrImg.style.height = "100%";
+        liveQrImg.style.left = "0";
+        liveQrImg.style.top = "0";
+        return;
+      }
+
+      const scaleX = liveQr.clientWidth / box.w;
+      const scaleY = liveQr.clientHeight / box.h;
+      liveQrImg.style.width = (liveQrImg.naturalWidth * scaleX) + "px";
+      liveQrImg.style.height = (liveQrImg.naturalHeight * scaleY) + "px";
+      liveQrImg.style.left = (-box.x * scaleX) + "px";
+      liveQrImg.style.top = (-box.y * scaleY) + "px";
+    }
+
+    function renderAdjustBox() {
+      const box = getActivePlacementBox();
+      const replaceAllActive = Boolean(
+        hasCurrentModeResult()
+        && currentResult
+        && currentResult.report
+        && currentResult.report.replace_all
+      );
+      if (!box || !preview.getAttribute("src") || replaceAllActive) {
+        adjustBox.style.display = "none";
+        return;
+      }
+      const { sx, sy } = getScale();
+      adjustBox.dataset.label = getAdjustBoxLabel();
+      adjustBox.style.display = "block";
+      adjustBox.style.left = (box.x * sx) + "px";
+      adjustBox.style.top = (box.y * sy) + "px";
+      adjustBox.style.width = (box.w * sx) + "px";
+      adjustBox.style.height = (box.h * sy) + "px";
+      renderLiveQr();
+    }
+
+    function renderQrCropBox() {
+      if (!enableQrCrop.checked || !hasUploadedQrSource()) {
+        qrCropBox.style.display = "none";
+        return;
+      }
+      const box = ensureQrCropBox(false);
+      if (!box || !qrCropPreview.naturalWidth || !qrCropPreview.clientWidth) {
+        qrCropBox.style.display = "none";
+        return;
+      }
+      const { sx, sy } = getQrCropScale();
+      qrCropBox.style.display = "block";
+      qrCropBox.style.left = (box.x * sx) + "px";
+      qrCropBox.style.top = (box.y * sy) + "px";
+      qrCropBox.style.width = (box.w * sx) + "px";
+      qrCropBox.style.height = (box.h * sy) + "px";
+      renderLiveQr();
+    }
+
+    function updateQrCropVisibility() {
+      const hasQr = hasUploadedQrSource();
+      resetQrCropBtn.disabled = !hasQr;
+      if (!hasQr) {
+        qrCropPlaceholder.style.display = "inline-block";
+        qrCropPreview.style.display = "none";
+        qrCropBox.style.display = "none";
+      } else if (qrCropPreview.getAttribute("src")) {
+        qrCropPlaceholder.style.display = "none";
+        qrCropPreview.style.display = "block";
+      }
+
+      if (!enableQrCrop.checked) {
+        qrCropBox.style.display = "none";
+      } else {
+        renderQrCropBox();
+      }
+      renderLiveQr();
+    }
+
+    function updateModeUi() {
+      updateModeCards();
+      setLiveOverlayActive(false);
+      if (isManualMode()) {
+        replaceAll.checked = false;
+        replaceAll.disabled = true;
+        replaceAllWrap.style.display = "none";
+        modeHint.textContent = "图里没有原二维码、只有空框/白框时，选这个。先上传原图，再把右边蓝框拖到要放二维码的位置。";
+        actionTip.textContent = "手动模式要先把右边蓝框放到位。蓝框放哪，二维码最后就加在哪。";
+        previewHintText.textContent = "手动模式：先把蓝框拖到位，再点“开始手动添加”。";
+        previewBottomTip.textContent = "手动模式下，先把蓝框放到要加二维码的位置。做完第一次后，不满意还可以继续拖蓝框微调。";
+        if (!hasCurrentModeResult()) {
+          showSourcePreview();
+          ensureManualTargetBox(false);
+        }
+      } else {
+        replaceAll.disabled = false;
+        replaceAllWrap.style.display = "flex";
+        modeHint.textContent = "图里本来就有二维码时，选这个。软件会先自动找原二维码，再帮你替换。";
+        actionTip.textContent = "自动模式会先找原二维码。没找到时，请切换到“图里没有原二维码，我手动放一个”。";
+        previewHintText.textContent = "自动模式：识别成功后，可拖蓝框微调位置和大小。";
+        previewBottomTip.textContent = "自动模式下，只有“替换单个二维码”才会显示蓝框。勾选“替换全部”时不会显示微调框。";
+      }
+      if (!isSyncing) {
+        submitBtn.textContent = getIdleSubmitText();
+      }
+      resetPositionBtn.textContent = getResetButtonText();
+      adjustBox.dataset.label = getAdjustBoxLabel();
+      renderAdjustBox();
+      renderLiveQr();
+    }
+
+    function buildReportText(r) {
+      const lines = ["处理完成"];
+      if (r.placement_mode === PLACEMENT_MODES.MANUAL) {
+        lines.push("当前模式: 手动放一个二维码");
+        const targetBox = parseBox(r.target_box);
+        if (targetBox) {
+          lines.push(
+            "手动画框: X=" + Math.round(targetBox.x) + "px, Y=" + Math.round(targetBox.y) +
+            "px, W=" + Math.round(targetBox.w) + "px, H=" + Math.round(targetBox.h) + "px"
+          );
+        }
+      } else {
+        lines.push("当前模式: 自动替换二维码");
+        lines.push("识别到二维码数量: " + r.qr_count);
+      }
+      lines.push("原图色彩模式: " + r.original_mode);
+      lines.push("原图格式: " + r.original_format);
+      lines.push("输出格式: " + r.output_format);
+      lines.push(
+        "微调参数: X=" + Math.round(r.offset_x_px) + "px, Y=" + Math.round(r.offset_y_px) +
+        "px, 缩放=" + Math.round(r.scale_percent) + "%, 旋转=" + Number(r.rotation_deg).toFixed(1) + "°"
+      );
+      lines.push("二维码留白: " + Number(r.quiet_zone_percent).toFixed(1) + "%");
+      if (enableQrCrop.checked && hasUploadedQrSource() && qrCropState) {
+        lines.push(
+          "上传二维码裁切: X=" + Math.round(qrCropState.x) + "px, Y=" + Math.round(qrCropState.y) +
+          "px, W=" + Math.round(qrCropState.w) + "px, H=" + Math.round(qrCropState.h) + "px"
+        );
+      }
+      return lines.join("\n");
+    }
+
+    function applyResponse(data, requestId) {
+      if (requestId < activeRequestId) {
+        return;
+      }
+      currentResult = data;
+      sessionId = data.session_id || sessionId;
+      qrSourceKind = data.qr_source_kind || data.report.qr_source_kind || qrSourceKind;
+      currentBox = quadToBBox(data.report.selected_quad);
+      reportedQrBox = parseBox(data.report.replacement_qr_box);
+      if (!qrCropDirty && reportedQrBox) {
+        qrCropState = { ...reportedQrBox };
+      }
+      const reportedTargetBox = parseBox(data.report.target_box);
+      if (reportedTargetBox) {
+        manualTargetBox = { ...reportedTargetBox };
+      }
+
+      download.href = data.download_url;
+      download.style.display = "inline-block";
+      showMessage(buildReportText(data.report), "success");
+      setLiveOverlayActive(false);
+      showResultPreview(data);
+
+      if (!qrObjectUrl && data.qr_preview_url) {
+        qrServerUrl = cacheBustedUrl(data.qr_preview_url);
+        setQrImageSource(qrServerUrl);
+      }
+
+      renderAdjustBox();
+      renderQrCropBox();
+      updateModeUi();
+    }
+
+    function enhanceErrorMessage(message) {
+      const text = String(message || "处理失败，请重试。");
+      if ((text.includes("没找到原二维码") || text.includes("没有识别到二维码")) && !text.includes("图里没有原二维码，我手动放一个")) {
+        return text + "\n如果这张图里本来就没有二维码，只有空框/白框，请改选“图里没有原二维码，我手动放一个”。";
+      }
+      return text;
+    }
+
+    async function submitRun() {
+      clearTimeout(syncTimer);
+      syncTimer = null;
+
+      const mode = getPlacementMode();
+      const source = sourceInput.files[0];
+      const qrImage = qrInput.files[0];
+      const qrText = qrTextInput.value.trim();
+
+      if (!sessionId && !source) {
+        showMessage("请先上传原图。", "error");
+        return;
+      }
+      if (!sessionId && !qrImage && !qrText) {
+        showMessage("请上传新二维码图片，或填写二维码内容。", "error");
+        return;
+      }
+
+      const manualTarget = mode === PLACEMENT_MODES.MANUAL
+        ? sanitizeManualTargetBox(manualTargetBox || ensureManualTargetBox(false))
+        : null;
+      if (mode === PLACEMENT_MODES.MANUAL && !manualTarget) {
+        showMessage("手动模式要先在右边把蓝框放到要加二维码的位置。", "error");
+        return;
+      }
+
+      const fd = new FormData();
+      if (sessionId) {
+        fd.append("session_id", sessionId);
+      } else {
+        fd.append("source_image", source);
+        if (qrImage) {
+          fd.append("replacement_qr_image", qrImage);
+        }
+        fd.append("replacement_qr_text", qrText);
+      }
+
+      fd.append("placement_mode", mode);
+      fd.append("replace_all", mode === PLACEMENT_MODES.AUTO ? replaceAll.checked : false);
+      fd.append("feather_ratio", document.getElementById("feather_ratio").value);
+      fd.append("output_format", document.getElementById("output_format").value);
+      fd.append("offset_x_px", document.getElementById("offset_x_px").value);
+      fd.append("offset_y_px", document.getElementById("offset_y_px").value);
+      fd.append("scale_percent", document.getElementById("scale_percent").value);
+      fd.append("rotation_deg", document.getElementById("rotation_deg").value);
+      fd.append("quiet_zone_percent", document.getElementById("quiet_zone_percent").value);
+
+      if (manualTarget) {
+        fd.append("target_box_x_px", manualTarget.x);
+        fd.append("target_box_y_px", manualTarget.y);
+        fd.append("target_box_w_px", manualTarget.w);
+        fd.append("target_box_h_px", manualTarget.h);
+      }
+
+      if (enableQrCrop.checked && hasUploadedQrSource()) {
+        const crop = sanitizeQrCropBox(qrCropState || ensureQrCropBox(false));
+        if (crop) {
+          fd.append("replacement_crop_x_px", crop.x);
+          fd.append("replacement_crop_y_px", crop.y);
+          fd.append("replacement_crop_w_px", crop.w);
+          fd.append("replacement_crop_h_px", crop.h);
+        }
+      }
+
+      const requestId = ++activeRequestId;
+      isSyncing = true;
+      setSyncStatus(true);
+      submitBtn.disabled = true;
+      submitBtn.textContent = sessionId
+        ? "同步中..."
+        : (mode === PLACEMENT_MODES.MANUAL ? "正在手动添加..." : "正在自动替换...");
+
+      try {
+        const res = await fetch("/api/replace", { method: "POST", body: fd });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || "处理失败，请重试。");
+        }
+        applyResponse(data, requestId);
+      } catch (err) {
+        if (currentResult) {
+          setLiveOverlayActive(false);
+          showResultPreview();
+        }
+        showMessage(enhanceErrorMessage(err.message || err), "error");
+      } finally {
+        isSyncing = false;
+        setSyncStatus(false);
+        submitBtn.disabled = false;
+        submitBtn.textContent = getIdleSubmitText();
+        if (pendingRun) {
+          pendingRun = false;
+          scheduleRun(120);
+        }
+      }
+    }
+
+    function scheduleRun(delayMs) {
+      clearTimeout(syncTimer);
+      if (isSyncing) {
+        pendingRun = true;
+        return;
+      }
+      syncTimer = setTimeout(() => {
+        submitRun();
+      }, delayMs);
+    }
+
+    function resetPosition() {
+      if (isManualSetupMode()) {
+        manualTargetDirty = false;
+        manualTargetBox = sanitizeManualTargetBox(createDefaultManualTargetBox());
+        renderAdjustBox();
+        if (sessionId) {
+          scheduleRun(0);
+        }
+        return;
+      }
+      setSliderValue("offset_x_px", DEFAULTS.offset_x_px);
+      setSliderValue("offset_y_px", DEFAULTS.offset_y_px);
+      setSliderValue("scale_percent", DEFAULTS.scale_percent);
+      setSliderValue("rotation_deg", DEFAULTS.rotation_deg);
+      if (sessionId) {
+        beginInteractivePreview();
+        scheduleRun(0);
+      }
+    }
+
+    function resetQrCrop() {
+      qrCropDirty = false;
+      qrCropState = sanitizeQrCropBox(reportedQrBox || createDefaultQrCropBox());
+      renderQrCropBox();
+      if (sessionId && enableQrCrop.checked && hasUploadedQrSource()) {
+        beginInteractivePreview();
+        scheduleRun(0);
+      }
+    }
+
+    sliderIds.forEach((id) => {
+      const input = document.getElementById(id);
+      const out = document.getElementById(id + "_v");
+      const sync = () => { out.textContent = input.value; };
+      input.addEventListener("input", () => {
+        sync();
+        if (sessionId) {
+          scheduleRun(id === "rotation_deg" ? 180 : 140);
+        }
+      });
+      sync();
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      submitRun();
+    });
+
+    resetPositionBtn.addEventListener("click", () => {
+      resetPosition();
+    });
+
+    closeAppBtn.addEventListener("click", () => {
+      shutdownApp();
+    });
+
+    resetQrCropBtn.addEventListener("click", () => {
+      resetQrCrop();
+    });
+
+    [placementModeAuto, placementModeManual].forEach((radio) => {
+      radio.addEventListener("change", () => {
+        clearMessage();
+        updateModeUi();
+      });
+    });
+
+    enableQrCrop.addEventListener("change", () => {
+      if (enableQrCrop.checked) {
+        ensureQrCropBox(false);
+      }
+      updateQrCropVisibility();
+      if (sessionId && hasUploadedQrSource()) {
+        if (enableQrCrop.checked) {
+          beginInteractivePreview();
+        }
+        scheduleRun(0);
+      }
+    });
+
+    sourceInput.addEventListener("change", () => {
+      invalidateSession();
+      manualTargetBox = null;
+      manualTargetDirty = false;
+      buildLocalSourcePreview();
+      clearMessage();
+      updateModeUi();
+    });
+
+    qrInput.addEventListener("change", () => {
+      invalidateSession();
+      buildLocalQrPreview();
+      clearMessage();
+      updateModeUi();
+    });
+
+    qrTextInput.addEventListener("input", () => {
+      if (!qrInput.files[0]) {
+        invalidateSession();
+        qrSourceKind = "generated";
+        qrServerUrl = "";
+        reportedQrBox = null;
+        qrCropState = null;
+        qrCropDirty = false;
+        setQrImageSource("");
+        clearMessage();
+        updateModeUi();
+      }
+    });
+
+    preview.addEventListener("load", () => {
+      if (isManualMode() && !hasCurrentModeResult()) {
+        ensureManualTargetBox(false);
+      }
+      renderAdjustBox();
+    });
+
+    qrCropPreview.addEventListener("load", () => {
+      if (!qrCropDirty && !qrCropState) {
+        ensureQrCropBox(false);
+      }
+      updateQrCropVisibility();
+    });
+
+    liveQrImg.addEventListener("load", () => {
+      renderLiveQr();
+    });
+
+    originalSize.addEventListener("change", () => {
+      if (originalSize.checked) {
+        preview.classList.add("original");
+      } else {
+        preview.classList.remove("original");
+      }
+      setTimeout(renderAdjustBox, 0);
+    });
+
+    window.addEventListener("resize", () => {
+      renderAdjustBox();
+      renderQrCropBox();
+    });
+
+    window.addEventListener("pageshow", () => {
+      if (!shuttingDown) {
+        startHeartbeat();
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!shuttingDown && document.visibilityState === "visible") {
+        pingHeartbeat(true, false);
+      }
+    });
+
+    window.addEventListener("pagehide", () => {
+      stopHeartbeat();
+      if (!shuttingDown) {
+        pingHeartbeat(false, true);
+      }
+    });
+
+    window.addEventListener("beforeunload", () => {
+      stopHeartbeat();
+      if (!shuttingDown) {
+        pingHeartbeat(false, true);
+      }
+    });
+
+    adjustBox.addEventListener("pointerdown", (e) => {
+      if (e.target === resizeHandle) {
+        return;
+      }
+      const activeBox = getActivePlacementBox();
+      if (!activeBox || !preview.getAttribute("src")) {
+        return;
+      }
+      e.preventDefault();
+      beginInteractivePreview();
+      adjustBox.setPointerCapture(e.pointerId);
+      dragState = {
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        box: { ...activeBox },
+        mode: isManualSetupMode() ? "manual_setup" : "fine_tune"
+      };
+    });
+
+    adjustBox.addEventListener("pointermove", (e) => {
+      if (!dragState || dragState.pointerId !== e.pointerId) {
+        return;
+      }
+      const { sx, sy } = getScale();
+      const dx = (e.clientX - dragState.startX) / sx;
+      const dy = (e.clientY - dragState.startY) / sy;
+      const { iw, ih } = getPlacementImageSize();
+      const targetBox = dragState.mode === "manual_setup"
+        ? (manualTargetBox || (manualTargetBox = { ...dragState.box }))
+        : currentBox;
+      if (!targetBox || !iw || !ih) {
+        return;
+      }
+      targetBox.x = clamp(dragState.box.x + dx, 0, Math.max(0, iw - dragState.box.w));
+      targetBox.y = clamp(dragState.box.y + dy, 0, Math.max(0, ih - dragState.box.h));
+      renderAdjustBox();
+    });
+
+    adjustBox.addEventListener("pointerup", (e) => {
+      if (!dragState || dragState.pointerId !== e.pointerId) {
+        return;
+      }
+      if (dragState.mode === "manual_setup") {
+        manualTargetBox = sanitizeManualTargetBox(manualTargetBox || dragState.box);
+        manualTargetDirty = true;
+        dragState = null;
+        renderAdjustBox();
+        if (sessionId) {
+          scheduleRun(120);
+        }
+        return;
+      }
+      const dx = currentBox.x - dragState.box.x;
+      const dy = currentBox.y - dragState.box.y;
+      const oldX = getSliderNumber("offset_x_px");
+      const oldY = getSliderNumber("offset_y_px");
+      setSliderValue("offset_x_px", Math.round(oldX + dx));
+      setSliderValue("offset_y_px", Math.round(oldY + dy));
+      dragState = null;
+      scheduleRun(100);
+    });
+
+    adjustBox.addEventListener("pointercancel", () => {
+      dragState = null;
+      setLiveOverlayActive(false);
+      showResultPreview();
+      renderAdjustBox();
+    });
+
+    resizeHandle.addEventListener("pointerdown", (e) => {
+      const activeBox = getActivePlacementBox();
+      if (!activeBox || !preview.getAttribute("src")) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      beginInteractivePreview();
+      resizeHandle.setPointerCapture(e.pointerId);
+      resizeState = {
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        box: { ...activeBox },
+        diag: Math.sqrt(activeBox.w * activeBox.w + activeBox.h * activeBox.h),
+        mode: isManualSetupMode() ? "manual_setup" : "fine_tune"
+      };
+    });
+
+    resizeHandle.addEventListener("pointermove", (e) => {
+      if (!resizeState || resizeState.pointerId !== e.pointerId) {
+        return;
+      }
+      const { sx, sy } = getScale();
+      const dx = (e.clientX - resizeState.startX) / sx;
+      const dy = (e.clientY - resizeState.startY) / sy;
+      let ratio = Math.max(
+        (resizeState.box.w + dx) / Math.max(1, resizeState.box.w),
+        (resizeState.box.h + dy) / Math.max(1, resizeState.box.h)
+      );
+      ratio = clamp(ratio, 0.4, 2.5);
+      const targetBox = resizeState.mode === "manual_setup"
+        ? (manualTargetBox || (manualTargetBox = { ...resizeState.box }))
+        : currentBox;
+      const { iw, ih } = getPlacementImageSize();
+      if (!targetBox || !iw || !ih) {
+        return;
+      }
+      const cx = resizeState.box.x + resizeState.box.w / 2;
+      const cy = resizeState.box.y + resizeState.box.h / 2;
+      targetBox.w = clamp(resizeState.box.w * ratio, 20, iw);
+      targetBox.h = clamp(resizeState.box.h * ratio, 20, ih);
+      targetBox.x = clamp(cx - targetBox.w / 2, 0, Math.max(0, iw - targetBox.w));
+      targetBox.y = clamp(cy - targetBox.h / 2, 0, Math.max(0, ih - targetBox.h));
+      renderAdjustBox();
+    });
+
+    resizeHandle.addEventListener("pointerup", (e) => {
+      if (!resizeState || resizeState.pointerId !== e.pointerId) {
+        return;
+      }
+      if (resizeState.mode === "manual_setup") {
+        manualTargetBox = sanitizeManualTargetBox(manualTargetBox || resizeState.box);
+        manualTargetDirty = true;
+        resizeState = null;
+        renderAdjustBox();
+        if (sessionId) {
+          scheduleRun(120);
+        }
+        return;
+      }
+      const newDiag = Math.sqrt(currentBox.w * currentBox.w + currentBox.h * currentBox.h);
+      const ratio = clamp(newDiag / Math.max(1, resizeState.diag), 0.4, 2.5);
+      const oldScale = getSliderNumber("scale_percent");
+      setSliderValue("scale_percent", clamp(Math.round(oldScale * ratio), 40, 220));
+      resizeState = null;
+      scheduleRun(100);
+    });
+
+    resizeHandle.addEventListener("pointercancel", () => {
+      resizeState = null;
+      setLiveOverlayActive(false);
+      showResultPreview();
+      renderAdjustBox();
+    });
+
+    qrCropBox.addEventListener("pointerdown", (e) => {
+      if (e.target === qrCropHandle) {
+        return;
+      }
+      if (!enableQrCrop.checked || !hasUploadedQrSource() || !ensureQrCropBox(false)) {
+        return;
+      }
+      e.preventDefault();
+      beginInteractivePreview();
+      qrCropBox.setPointerCapture(e.pointerId);
+      qrCropDragState = {
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        box: { ...qrCropState },
+      };
+    });
+
+    qrCropBox.addEventListener("pointermove", (e) => {
+      if (!qrCropDragState || qrCropDragState.pointerId !== e.pointerId) {
+        return;
+      }
+      const { sx, sy } = getQrCropScale();
+      const dx = (e.clientX - qrCropDragState.startX) / sx;
+      const dy = (e.clientY - qrCropDragState.startY) / sy;
+      const iw = qrCropPreview.naturalWidth;
+      const ih = qrCropPreview.naturalHeight;
+      qrCropState.x = clamp(qrCropDragState.box.x + dx, 0, Math.max(0, iw - qrCropDragState.box.w));
+      qrCropState.y = clamp(qrCropDragState.box.y + dy, 0, Math.max(0, ih - qrCropDragState.box.h));
+      renderQrCropBox();
+    });
+
+    qrCropBox.addEventListener("pointerup", (e) => {
+      if (!qrCropDragState || qrCropDragState.pointerId !== e.pointerId) {
+        return;
+      }
+      qrCropState = sanitizeQrCropBox(qrCropState);
+      qrCropDirty = true;
+      qrCropDragState = null;
+      renderQrCropBox();
+      if (sessionId && enableQrCrop.checked) {
+        scheduleRun(120);
+      }
+    });
+
+    qrCropBox.addEventListener("pointercancel", () => {
+      qrCropDragState = null;
+      setLiveOverlayActive(false);
+      showResultPreview();
+      renderQrCropBox();
+    });
+
+    qrCropHandle.addEventListener("pointerdown", (e) => {
+      if (!enableQrCrop.checked || !hasUploadedQrSource() || !ensureQrCropBox(false)) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      beginInteractivePreview();
+      qrCropHandle.setPointerCapture(e.pointerId);
+      qrCropResizeState = {
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        box: { ...qrCropState },
+      };
+    });
+
+    qrCropHandle.addEventListener("pointermove", (e) => {
+      if (!qrCropResizeState || qrCropResizeState.pointerId !== e.pointerId) {
+        return;
+      }
+      const { sx, sy } = getQrCropScale();
+      const dx = (e.clientX - qrCropResizeState.startX) / sx;
+      const dy = (e.clientY - qrCropResizeState.startY) / sy;
+      const iw = qrCropPreview.naturalWidth;
+      const ih = qrCropPreview.naturalHeight;
+      qrCropState.w = clamp(qrCropResizeState.box.w + dx, 1, Math.max(1, iw - qrCropResizeState.box.x));
+      qrCropState.h = clamp(qrCropResizeState.box.h + dy, 1, Math.max(1, ih - qrCropResizeState.box.y));
+      renderQrCropBox();
+    });
+
+    qrCropHandle.addEventListener("pointerup", (e) => {
+      if (!qrCropResizeState || qrCropResizeState.pointerId !== e.pointerId) {
+        return;
+      }
+      qrCropState = sanitizeQrCropBox(qrCropState);
+      qrCropDirty = true;
+      qrCropResizeState = null;
+      renderQrCropBox();
+      if (sessionId && enableQrCrop.checked) {
+        scheduleRun(120);
+      }
+    });
+
+    qrCropHandle.addEventListener("pointercancel", () => {
+      qrCropResizeState = null;
+      setLiveOverlayActive(false);
+      showResultPreview();
+      renderQrCropBox();
+    });
+
+    startHeartbeat();
+    updateModeUi();
+  </script>
+</body>
+</html>
+

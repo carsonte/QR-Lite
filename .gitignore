@@ -1,0 +1,28 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+
+# Local test/output files
+output/
+tmp_test/
+*.prof
+*.log
+
+# Tooling/local app state
+.gradio/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+
+# Local scratch asset
+未标题-2_画板 1.png
