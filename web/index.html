@@ -63,6 +63,8 @@
       flex: 0 0 auto;
     }
     .author-badge {
+      display: inline-flex;
+      align-items: center;
       border: 1px solid #cfe1ff;
       background: rgba(255,255,255,.85);
       color: #31507f;
@@ -70,6 +72,13 @@
       padding: 6px 12px;
       font-size: 13px;
       white-space: nowrap;
+      text-decoration: none;
+      transition: border-color .15s ease, color .15s ease, box-shadow .15s ease;
+    }
+    .author-badge:hover {
+      color: #174ea6;
+      border-color: #9fc3ff;
+      box-shadow: 0 0 0 3px rgba(22,119,255,.10);
     }
     .hero h1 { margin: 0 0 6px; color: #174ea6; font-size: 24px; }
     .hero p { margin: 0; color: #4f6387; }
@@ -578,7 +587,12 @@
             <span class="hero-pill">右边蓝框放哪，结果就出现在哪</span>
           </div>
         </div>
-        <div class="author-badge">Created by @husky</div>
+        <a
+          class="author-badge"
+          href="https://github.com/carsonte/QR-Lite/tree/main"
+          target="_blank"
+          rel="noreferrer"
+        >Created by @carsonte</a>
       </div>
     </div>
 

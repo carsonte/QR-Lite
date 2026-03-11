@@ -16,7 +16,8 @@ APP_HINT = "\u9996\u6b21\u542f\u52a8\u6216\u5355\u6587\u4ef6\u7248\u4f1a\u7a0d\u
 APP_ERROR_TITLE = "\u542f\u52a8\u5931\u8d25"
 APP_ERROR_HINT = "\u8bf7\u5173\u95ed\u7a97\u53e3\u540e\u91cd\u8bd5\uff0c\u6216\u628a\u62a5\u9519\u622a\u56fe\u7ed9\u7ef4\u62a4\u8005\u3002"
 APP_ERROR_DETAIL = "\u670d\u52a1\u8fdb\u7a0b\u542f\u52a8\u5931\u8d25\u3002"
-AUTHOR = "Created by @husky"
+AUTHOR = "Created by @carsonte"
+PROJECT_URL = "https://github.com/carsonte/QR-Lite/tree/main"
 POLL_INTERVAL_MS = 250
 PROBE_TIMEOUT_SECONDS = 0.35
 STARTUP_TIMEOUT_SECONDS = max(15, int(os.getenv("QR_LITE_STARTUP_TIMEOUT_SECONDS", "60")))
@@ -126,8 +127,16 @@ class LauncherWindow:
         self.error_label = tk.Label(frame, textvariable=self.error_var, bg="#ffffff", fg="#b42318", font=("Microsoft YaHei UI", 9))
         self.error_label.place(x=28, y=158)
 
-        author = tk.Label(frame, text=AUTHOR, bg="#ffffff", fg="#7b8798", font=("Segoe UI", 9))
-        author.place(x=286, y=24)
+        author = tk.Label(
+            frame,
+            text=AUTHOR,
+            bg="#ffffff",
+            fg="#35507f",
+            font=("Segoe UI", 9),
+            cursor="hand2",
+        )
+        author.place(x=396, y=24, anchor="ne")
+        author.bind("<Button-1>", lambda _event: webbrowser.open(PROJECT_URL))
 
     def start_server(self) -> None:
         if self.server_thread is not None:

@@ -60,7 +60,7 @@ def _build_splash(icon: Image.Image) -> Image.Image:
     draw.text((390, 175), "QR Lite", font=title_font, fill=(23, 78, 166, 255))
     draw.text((390, 248), "正在启动，请稍候...", font=body_font, fill=(63, 87, 126, 255))
     draw.text((390, 290), "启动时可能需要几秒钟", font=body_font, fill=(99, 118, 153, 255))
-    draw.text((390, 356), "Created by @husky", font=small_font, fill=(109, 121, 145, 255))
+    draw.text((390, 356), "Created by @carsonte", font=small_font, fill=(109, 121, 145, 255))
     return splash
 
 
