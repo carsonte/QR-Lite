@@ -3,19 +3,37 @@
 [English](README.md) | [简体中文](README.zh-CN.md)
 
 <p align="center">
-  <img src="docs/images/layout-desktop.png" alt="QR Lite preview" width="960">
-</p>
-
-<p align="center">
+  <a href="https://github.com/carsonte/QR-Lite/releases">
+    <img alt="Download latest release" src="https://img.shields.io/badge/Download-Windows%20Release-1677FF?logo=github&logoColor=white">
+  </a>
+  <a href="https://github.com/carsonte/QR-Lite/stargazers">
+    <img alt="GitHub stars" src="https://img.shields.io/github/stars/carsonte/QR-Lite?style=social">
+  </a>
   <img alt="Python 3.11" src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white">
   <img alt="Platform Windows" src="https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white">
   <img alt="Package PyInstaller" src="https://img.shields.io/badge/Package-PyInstaller-5A2D81">
   <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-green">
 </p>
 
-QR Lite is a local QR code replacement tool built for design, operations, and marketing workflows where people need to update images quickly without opening a full design suite.
+<p align="center">
+  Replace QR codes in posters, marketing assets, and print-ready images locally.
+  <br>
+  Auto replace existing QR codes or manually place a new one into an empty frame.
+</p>
 
-It can replace an existing QR code automatically, or add a new one manually when the source image only has an empty placeholder box.
+<p align="center">
+  <a href="https://github.com/carsonte/QR-Lite/releases"><strong>Download for Windows</strong></a>
+  &middot;
+  <a href="docs/releases/v1.0.0.md"><strong>Release Notes</strong></a>
+  &middot;
+  <a href="docs/launch-kit.md"><strong>Launch Kit</strong></a>
+</p>
+
+<p align="center">
+  <img src="docs/images/quick-demo.gif" alt="QR Lite quick demo" width="960">
+</p>
+
+If QR Lite saves you time, a GitHub star helps more people discover it.
 
 ## Why QR Lite
 
@@ -53,31 +71,21 @@ It can replace an existing QR code automatically, or add a new one manually when
   </tr>
 </table>
 
-## Modes
+## Download
 
-### Auto Replace
+For teammates, the recommended distribution format is a zipped `onedir` build from GitHub Releases.
 
-Use this when the source image already contains a QR code.  
-QR Lite detects the QR region first, then replaces it with the new QR code.
+Create the release zip locally with:
 
-### Manual Placement
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\build_release_zip.ps1 -Version v1.0.0
+```
 
-Use this when the source image does not contain a QR code and only has an empty frame or placeholder.  
-Place the blue box where the new QR code should go, then generate the result.
+That command creates:
 
-## CMYK-Safe Output
-
-When the source image is a `CMYK JPEG` and the output stays in `JPEG`, QR Lite uses a dedicated `CMYK` processing path to avoid unnecessary full-image round-trip color conversion.
-
-This makes it more suitable for posters, print-ready graphics, and JPEG assets with embedded color profiles.
-
-## Performance
-
-QR Lite includes several optimizations for large images:
-
-- QR detection runs on a downscaled preview first, then maps coordinates back
-- Perspective blending only processes the local QR region instead of the whole image
-- Heavy modules are loaded lazily to reduce startup stalls
+```text
+output\release\QRLite-v1.0.0-windows-x64.zip
+```
 
 ## Quick Start
 
@@ -102,7 +110,7 @@ py -m pip install -r requirements.txt
 py launcher.py
 ```
 
-After launch, a startup window appears first and then opens the browser automatically.  
+After launch, a startup window appears first and then opens the browser automatically.
 If the browser does not open, visit the local URL printed in the terminal, usually:
 
 ```text
@@ -119,6 +127,32 @@ http://127.0.0.1:7860
 6. Generate the result
 7. Fine-tune and regenerate if needed
 8. Download the final image
+
+## Modes
+
+### Auto Replace
+
+Use this when the source image already contains a QR code.
+QR Lite detects the QR region first, then replaces it with the new QR code.
+
+### Manual Placement
+
+Use this when the source image does not contain a QR code and only has an empty frame or placeholder.
+Place the blue box where the new QR code should go, then generate the result.
+
+## CMYK-Safe Output
+
+When the source image is a `CMYK JPEG` and the output stays in `JPEG`, QR Lite uses a dedicated `CMYK` processing path to avoid unnecessary full-image round-trip color conversion.
+
+This makes it more suitable for posters, print-ready graphics, and JPEG assets with embedded color profiles.
+
+## Performance
+
+QR Lite includes several optimizations for large images:
+
+- QR detection runs on a downscaled preview first, then maps coordinates back
+- Perspective blending only processes the local QR region instead of the whole image
+- Heavy modules are loaded lazily to reduce startup stalls
 
 ## Packaging
 
@@ -142,11 +176,12 @@ Notes:
 
 ## Release Notes
 
-The first release notes draft is available here:
-
 - [v1.0.0 Release Notes](docs/releases/v1.0.0.md)
 
-You can reuse it directly when creating a GitHub Release.
+## Launch Support
+
+- [Launch Kit](docs/launch-kit.md)
+- [README screenshot generator](scripts/capture_readme_screenshots.py)
 
 ## Repository Layout
 
@@ -157,6 +192,7 @@ qr_replace.py          QR detection and replacement core
 web/                   Frontend page
 branding/              Branding assets
 docs/                  Screenshots and release notes
+scripts/               Screenshot and release helpers
 build_exe.ps1          Packaging script
 QRLite.spec            PyInstaller spec
 ```
@@ -166,18 +202,6 @@ QRLite.spec            PyInstaller spec
 - Build and test artifacts such as `dist/`, `build/`, `tmp_test/`, and `output/` are ignored
 - Packaged builds should go to GitHub Releases, not repository history
 - The project currently prioritizes stability, compatibility, and maintainability over maximum size reduction
-
-## Current Status
-
-This version already includes:
-
-- Manual QR placement mode
-- Mode-switch state fixes
-- Startup freeze fix
-- `Tcl_AsyncDelete` shutdown fix
-- Large-image performance improvements
-- `CMYK + RGB QR` color-safe processing
-- Packaging size and dependency cleanup
 
 ## License
 

@@ -3,19 +3,37 @@
 [English](README.md) | [简体中文](README.zh-CN.md)
 
 <p align="center">
-  <img src="docs/images/layout-desktop.png" alt="QR Lite 预览" width="960">
-</p>
-
-<p align="center">
+  <a href="https://github.com/carsonte/QR-Lite/releases">
+    <img alt="下载最新版本" src="https://img.shields.io/badge/Download-Windows%20Release-1677FF?logo=github&logoColor=white">
+  </a>
+  <a href="https://github.com/carsonte/QR-Lite/stargazers">
+    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/carsonte/QR-Lite?style=social">
+  </a>
   <img alt="Python 3.11" src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white">
   <img alt="Platform Windows" src="https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white">
   <img alt="Package PyInstaller" src="https://img.shields.io/badge/Package-PyInstaller-5A2D81">
   <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-green">
 </p>
 
-QR Lite 是一个本地二维码替换工具，适合设计、运营、市场这类需要快速改图、但又不想打开复杂设计软件的场景。
+<p align="center">
+  一个本地二维码替换工具，适合海报、宣传图、物料图和印刷图稿。
+  <br>
+  图里有原二维码就自动替换，图里只有空框就手动画框放一个。
+</p>
 
-它既可以自动替换原图里已有的二维码，也可以在原图只有空框或占位框时，手动画框添加新的二维码。
+<p align="center">
+  <a href="https://github.com/carsonte/QR-Lite/releases"><strong>下载 Windows 版本</strong></a>
+  &middot;
+  <a href="docs/releases/v1.0.0.md"><strong>查看 Release 说明</strong></a>
+  &middot;
+  <a href="docs/launch-kit.md"><strong>查看发布素材</strong></a>
+</p>
+
+<p align="center">
+  <img src="docs/images/quick-demo.gif" alt="QR Lite 演示" width="960">
+</p>
+
+如果这个项目帮你省了时间，点一个 GitHub Star 会很有帮助。
 
 ## 为什么用 QR Lite
 
@@ -53,31 +71,21 @@ QR Lite 是一个本地二维码替换工具，适合设计、运营、市场这
   </tr>
 </table>
 
-## 两种模式
+## 下载
 
-### 自动替换
+给同事分发时，最推荐的格式是 GitHub Releases 里的 `onedir` zip 包。
 
-适合原图里本来就有二维码的情况。  
-QR Lite 会先识别二维码区域，再替换成新的二维码。
+本地生成 release zip 的命令：
 
-### 手动放置
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\build_release_zip.ps1 -Version v1.0.0
+```
 
-适合原图里没有二维码、只有空框 / 白框 / 占位框的情况。  
-你只需要把右侧蓝框拖到目标位置，然后生成结果。
+生成结果在：
 
-## CMYK 输出说明
-
-当原图是 `CMYK JPEG` 且输出仍保持为 `JPEG` 时，QR Lite 会走专门的 `CMYK` 处理路径，尽量避免整张图来回转色。
-
-这让它更适合海报、印刷物料以及带色彩配置的 JPEG 成品图。
-
-## 性能优化
-
-针对大图场景，这个项目已经做了这些优化：
-
-- 二维码识别先在缩小图上进行，再映射回原图坐标
-- 透视贴图只处理二维码附近的局部区域，不再每次处理整张图
-- 启动时延后加载重模块，减少打开软件时的卡顿感
+```text
+output\release\QRLite-v1.0.0-windows-x64.zip
+```
 
 ## 快速开始
 
@@ -95,15 +103,15 @@ python -m pip install -r requirements.txt
 python launcher.py
 ```
 
-如果本机没有 `python` 命令，可以改用：
+如果本机没有 `python` 命令，也可以改用：
 
 ```powershell
 py -m pip install -r requirements.txt
 py launcher.py
 ```
 
-启动后会先显示启动窗口，然后自动打开浏览器。  
-如果浏览器没有自动打开，可以访问终端输出的本地地址，通常是：
+启动后会先显示启动窗口，然后自动打开浏览器。
+如果浏览器没有自动打开，可以访问终端里打印的本地地址，通常是：
 
 ```text
 http://127.0.0.1:7860
@@ -119,6 +127,32 @@ http://127.0.0.1:7860
 6. 开始生成
 7. 不满意就继续微调，再重新生成
 8. 下载结果图
+
+## 两种模式
+
+### 自动替换
+
+适合原图里本来就有二维码的情况。
+QR Lite 会先识别二维码区域，再替换成新的二维码。
+
+### 手动放置
+
+适合原图里没有二维码、只有空框或占位框的情况。
+你只需要把蓝框拖到目标位置，然后生成结果。
+
+## CMYK 输出说明
+
+当原图是 `CMYK JPEG` 且输出保持为 `JPEG` 时，QR Lite 会走专门的 `CMYK` 处理路径，尽量避免整张图来回转色。
+
+这让它更适合海报、印刷物料以及带 ICC 配置的 JPEG 成品图。
+
+## 性能优化
+
+针对大图场景，这个项目已经做了这些优化：
+
+- 二维码识别先在缩小图上进行，再映射回原图坐标
+- 透视贴图只处理二维码附近的局部区域，不再每次处理整张大图
+- 启动时延后加载重模块，减少打开软件时的卡顿感
 
 ## 打包
 
@@ -140,23 +174,25 @@ dist\QRLite\QRLite.exe
 - 分发给同事时，要发整个 `dist/QRLite` 文件夹
 - 更推荐把整个目录打成 zip 后再分发
 
-## Release 文案
-
-首个正式版的 Release 文案已经整理在这里：
+## Release 说明
 
 - [v1.0.0 Release Notes](docs/releases/v1.0.0.md)
 
-如果你准备在 GitHub Releases 发正式包，可以直接复用这份内容。
+## 发布支持
+
+- [Launch Kit](docs/launch-kit.md)
+- [README 截图生成脚本](scripts/capture_readme_screenshots.py)
 
 ## 仓库结构
 
 ```text
 app.py                 FastAPI 服务端
 launcher.py            Windows 启动窗口
-qr_replace.py          二维码识别与替换核心逻辑
+qr_replace.py          二维码识别与替换核心
 web/                   前端页面
 branding/              品牌素材
-docs/                  截图和 Release 文案
+docs/                  截图和 Release 文档
+scripts/               截图和发布辅助脚本
 build_exe.ps1          打包脚本
 QRLite.spec            PyInstaller 配置
 ```
@@ -166,18 +202,6 @@ QRLite.spec            PyInstaller 配置
 - `dist/`、`build/`、`tmp_test/`、`output/` 这些构建和测试产物已经被忽略
 - 正式包更适合放到 GitHub Releases，而不是直接提交进仓库历史
 - 当前项目优先保证稳定性、兼容性和可维护性，其次才是继续压缩体积
-
-## 当前版本状态
-
-当前版本已经包含这些修复和优化：
-
-- 手动添加二维码模式
-- 模式切换状态修复
-- 启动卡住问题修复
-- 关闭时报 `Tcl_AsyncDelete` 修复
-- 大图性能优化
-- `CMYK + RGB 二维码` 保色处理
-- 打包体积与依赖清理优化
 
 ## 开源协议
 

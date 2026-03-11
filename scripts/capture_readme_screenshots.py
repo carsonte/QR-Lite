@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 
 import requests
+from PIL import Image
 from playwright.sync_api import Browser, Page, Playwright, sync_playwright
 
 
@@ -16,6 +17,7 @@ TMP_DIR = ROOT / "tmp_test"
 PORT = 7888
 BASE_URL = f"http://127.0.0.1:{PORT}"
 VIEWPORT = {"width": 1440, "height": 1600}
+DEMO_GIF = DOCS_DIR / "quick-demo.gif"
 
 
 def wait_ready(timeout_seconds: float = 30.0) -> None:
@@ -87,12 +89,37 @@ def screenshot_manual_success(browser: Browser) -> None:
     page.close()
 
 
+def build_demo_gif() -> None:
+    crop_box = (24, 16, 1416, 1140)
+    target_size = (1200, 968)
+    frame_paths = [
+        DOCS_DIR / "layout-desktop.png",
+        DOCS_DIR / "auto-success.png",
+        DOCS_DIR / "manual-success.png",
+    ]
+    frames = []
+    for path in frame_paths:
+        frame = Image.open(path).convert("RGBA").crop(crop_box).resize(target_size, Image.Resampling.LANCZOS)
+        frames.append(frame.convert("RGB").quantize(colors=96, method=Image.MEDIANCUT))
+
+    frames[0].save(
+        DEMO_GIF,
+        save_all=True,
+        append_images=frames[1:],
+        duration=[1600, 1800, 1800],
+        loop=0,
+        optimize=True,
+        disposal=2,
+    )
+
+
 def capture_all(playwright: Playwright) -> None:
     browser = playwright.chromium.launch(headless=True)
     try:
         screenshot_layout(browser)
         screenshot_auto_success(browser)
         screenshot_manual_success(browser)
+        build_demo_gif()
     finally:
         browser.close()
 
