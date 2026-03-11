@@ -1,50 +1,74 @@
 # QR Lite
 
+<p align="center">
+  <img src="docs/images/layout-desktop.png" alt="QR Lite preview" width="960">
+</p>
+
+<p align="center">
+  <img alt="Python 3.11" src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white">
+  <img alt="Platform Windows" src="https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white">
+  <img alt="Package PyInstaller" src="https://img.shields.io/badge/Package-PyInstaller-5A2D81">
+  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-green">
+</p>
+
 本地二维码替换工具，适合设计、运营、市场这类需要快速改图但不想进复杂设计软件的场景。
 
 QR Lite can replace an existing QR code automatically, or add a new one manually when the source image only has an empty placeholder box.
 
-## What It Does
+## Why QR Lite
+
+- 不需要复杂设计软件
+- 原图有二维码时可以自动识别并替换
+- 原图没有二维码时也能手动画框补上
+- 文案和流程都偏“傻瓜式”，适合直接给同事使用
+- 对 `CMYK JPEG` 原图更友好，适合印刷类物料修改
+
+## Features
 
 - 自动识别原图中的二维码并替换
-- 原图没有二维码时，支持手动画框添加
-- 支持拖拽蓝框微调位置和大小
-- 支持上传二维码图片，或直接输入内容生成二维码
-- 支持先裁掉二维码图片下方说明文字
-- 尽量保留原图的 ICC Profile / DPI / EXIF
+- 手动放置模式，适合空框 / 白框 / 占位框
+- 拖拽蓝框微调位置和大小
+- 上传二维码图片，或直接输入内容生成二维码
+- 支持裁掉二维码图片下方说明文字
+- 尽量保留 ICC Profile / DPI / EXIF
 - `CMYK JPEG` 原图替换 `RGB` 二维码后，输出仍可保持 `CMYK JPEG`
-- 对大图做了性能优化，低配笔记本上的等待时间更短
+- 大图性能优化，低配笔记本上的等待时间更短
 
-## Typical Use Cases
+## Screenshots
 
-- 海报、易拉宝、宣传图里的二维码换新
-- 设计稿里只有空框，需要后补二维码
-- 市场物料批量改二维码，但又不想每张图重新排版
-- 需要尽量保留原图色彩信息的印刷类 JPEG 文件
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/images/auto-success.png" alt="Auto replace mode">
+    </td>
+    <td width="50%">
+      <img src="docs/images/manual-success.png" alt="Manual placement mode">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">自动替换：适合原图里本来就有二维码</td>
+    <td align="center">手动放置：适合只有空框或占位框</td>
+  </tr>
+</table>
 
 ## Two Modes
 
-### 1. Auto Replace
+### Auto Replace
 
 适合原图里本来就有二维码的情况。  
 软件会先自动识别二维码位置，再替换成新的二维码。
 
-### 2. Manual Placement
+### Manual Placement
 
 适合原图里没有二维码、只有空框 / 白框 / 占位框的情况。  
 你只需要在右侧预览图上把蓝框拖到目标位置，然后开始生成。
 
-## Key Features
+## CMYK-Safe Output
 
-### Direct, Foolproof UI
+当原图是 `CMYK JPEG` 且输出格式保持 `JPEG` 时，程序会走专门的 `CMYK` 处理路径，尽量避免整张图来回转色。  
+这让它更适合海报、印刷物料和已经带色彩配置的设计成品图。
 
-界面文案已经按“下一步该做什么”重写，不走抽象产品话术，尽量降低误操作。
-
-### CMYK-Safe Output
-
-当原图是 `CMYK JPEG` 且输出格式保持 `JPEG` 时，程序会走专门的 `CMYK` 处理路径，尽量避免整张图来回转色。
-
-### Performance Optimized
+## Performance
 
 针对大图场景做过专项优化：
 
@@ -113,6 +137,14 @@ dist\QRLite\QRLite.exe
 - 分发给同事时，要发整个 `dist/QRLite` 文件夹
 - 更推荐把整个目录打成 zip 再发
 
+## Release Notes
+
+首个正式版本文案已经整理在：
+
+- [v1.0.0 Release Notes](docs/releases/v1.0.0.md)
+
+如果你准备在 GitHub Releases 发正式包，可以直接复用这份文案。
+
 ## Repository Layout
 
 ```text
@@ -121,6 +153,7 @@ launcher.py            Windows launcher window
 qr_replace.py          QR detection and replacement core
 web/                   Frontend page
 branding/              Branding assets
+docs/                  Screenshots and release notes
 build_exe.ps1          Packaging script
 QRLite.spec            PyInstaller spec
 ```
@@ -145,5 +178,4 @@ QRLite.spec            PyInstaller spec
 
 ## License
 
-暂未添加开源许可证。  
-如果你准备对外公开分发，建议后续补一个明确的 `LICENSE` 文件。
+This project is licensed under the [MIT License](LICENSE).
