@@ -22,6 +22,15 @@
 </p>
 
 <p align="center">
+  QR Lite 可以理解成一个本地的 <strong>QR code replacement tool</strong> / <strong>QR code replacer for images</strong>。
+  <br>
+  适合 <strong>replace QR codes in posters, screenshots, flyers, and marketing assets</strong> 这类需求，
+  也适合在只有空框时做 <strong>manual QR placement</strong>。
+  <br>
+  对需要 <strong>CMYK-safe QR replacement</strong> 的印刷图稿场景也更友好。
+</p>
+
+<p align="center">
   <a href="https://github.com/carsonte/QR-Lite/releases"><strong>下载 Windows 版本</strong></a>
   &middot;
   <a href="docs/releases/v1.0.0.md"><strong>查看 Release 说明</strong></a>
@@ -33,7 +42,7 @@
   <img src="docs/images/quick-demo.gif" alt="QR Lite 演示" width="960">
 </p>
 
-如果这个项目帮你省了时间，点一个 GitHub Star 会很有帮助。
+如果这个项目帮你省了时间，点一个 GitHub Star 会很有帮助，也能让更多人在找二维码替换工具时看到它。
 
 ## 为什么用 QR Lite
 

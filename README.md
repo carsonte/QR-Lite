@@ -22,6 +22,14 @@
 </p>
 
 <p align="center">
+  QR Lite is a local <strong>QR code replacement tool</strong> and <strong>QR code replacer for images</strong>.
+  <br>
+  Use it to <strong>replace QR codes in posters, screenshots, flyers, and marketing assets</strong>, or to <strong>manually place a QR code into an empty placeholder</strong>.
+  <br>
+  It is especially useful for <strong>CMYK-safe QR replacement</strong> in print-ready JPEG workflows.
+</p>
+
+<p align="center">
   <a href="https://github.com/carsonte/QR-Lite/releases"><strong>Download for Windows</strong></a>
   &middot;
   <a href="docs/releases/v1.0.0.md"><strong>Release Notes</strong></a>
@@ -33,7 +41,7 @@
   <img src="docs/images/quick-demo.gif" alt="QR Lite quick demo" width="960">
 </p>
 
-If QR Lite saves you time, a GitHub star helps more people discover it.
+If QR Lite saves you time, a GitHub star helps more people discover this QR code replacement tool.
 
 ## Why QR Lite
 
