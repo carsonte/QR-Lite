@@ -1,4 +1,4 @@
-# QR Lite
+# QR Lite 图片二维码自动替换
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
